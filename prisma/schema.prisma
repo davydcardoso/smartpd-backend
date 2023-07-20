@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Params {
+  id          String  @id @default(uuid())
+  name        String  @unique @db.VarChar(250)
+  companiesId String? @map("company_id")
+  value       String
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  Companies Companies? @relation(fields: [companiesId], references: [id])
+
+  @@map("params")
+}
+
+enum CompanyStatus {
+  ACTIVATED
+  DEACTIVATED
+  EXCLUDED
+}
+
+model Companies {
+  id                String        @id @default(uuid())
+  name              String        @db.VarChar(250)
+  email             String        @unique @db.VarChar(250)
+  document          String        @unique @db.VarChar(21)
+  status            CompanyStatus @default(DEACTIVATED)
+  sigUrl            String?       @map("sig_url") @db.VarChar()
+  responsibleEntity String?       @map("responsible_entity") @db.VarChar()
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  Apps   Apps[]
+  Users  Users[]
+  Params Params[]
+
+  @@map("companies")
+}
+
+enum AccessLevel {
+  DEVELOPER
+  ADMINISTRATOR
+  SUPORT
+  CLIENT
+}
+
+model Users {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  document       String   @unique @db.VarChar(21)
+  telephone      String   @db.VarChar(21)
+  birthDate      DateTime @map("birth_date") @db.Date
+  motherName     String   @map("mother_name") @db.VarChar(255)
+  emailConfirmed Boolean  @default(false) @map("email_confirmed")
+
+  companiesId String      @map("company_id")
+  accessLevel AccessLevel @default(CLIENT) @map("access_level")
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  companies Companies @relation(fields: [companiesId], references: [id])
+
+  @@map("users")
+}
+
+model PasswordChanges {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  code      String   @unique
+  expiresIn DateTime @map("expires_in")
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("password_changes")
+}
+
+enum ServicesAmbient {
+  PRODUCTION
+  DEVELOPMENT
+  SANDBOX
+}
+
+enum ServicesStatus {
+  ONLINE
+  OFFLINE
+}
+
+enum ServiceType {
+  ANONYMOUS_SERVICES
+  CITIZEN_SERVICES
+  SERVER_PORTAL
+}
+
+model Services {
+  id             String          @id @default(uuid())
+  name           String          @unique @db.VarChar(150)
+  description    String?         @db.VarChar(255)
+  pathUrl        String          @map("path_url") @db.VarChar()
+  buttonIcon     String?         @map("button_icon") @db.Text
+  mobileModule   String?         @default("Home") @map("mobile_module") @db.VarChar()
+  ambient        ServicesAmbient @default(SANDBOX)
+  serviceType    ServiceType     @default(CITIZEN_SERVICES) @map("service_type")
+  servicesStatus ServicesStatus  @default(OFFLINE) @map("status")
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  AppServices AppsServices[]
+
+  @@map("services")
+}
+
+model Apps {
+  id                String   @id @default(uuid())
+  name              String   @db.VarChar()
+  status            String   @db.VarChar()
+  version           String   @db.VarChar()
+  currentPlan       String   @map("current_plan") @db.VarChar()
+  publicationDate   DateTime @map("publication_date") @db.Date
+  availableVersions String   @map("available_versions")
+
+  companiesId String    @map("company_id")
+  companies   Companies @relation(fields: [companiesId], references: [id])
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  AppServices AppsServices[]
+
+  @@map("apps")
+}
+
+model AppsServices {
+  id String @id @default(uuid())
+
+  serviceId String   @map("service_id") @db.VarChar()
+  services  Services @relation(fields: [serviceId], references: [id])
+
+  appsId String @map("apps_id") @db.VarChar()
+  apps   Apps   @relation(fields: [appsId], references: [id])
+
+  createdAt DateTime? @map("created_at") @db.Date
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("apps_services")
+}

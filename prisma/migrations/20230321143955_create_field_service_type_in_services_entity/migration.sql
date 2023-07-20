@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "ServiceType" AS ENUM ('ANONYMOUS_SERVICES', 'CITIZEN_SERVICES', 'SERVER_PORTAL');
+
+-- AlterTable
+ALTER TABLE "services" ADD COLUMN     "service_type" "ServiceType" NOT NULL DEFAULT 'CITIZEN_SERVICES';

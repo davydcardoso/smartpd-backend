@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "companies" ADD COLUMN     "status" VARCHAR NOT NULL DEFAULT 'DEACTIVATED';
