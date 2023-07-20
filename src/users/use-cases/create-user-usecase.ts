@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common/decorators';
 import { UseCase } from 'src/core/domain/use-case';
 
-import { Either, left, right } from 'src/core/logic/either';
+import { Either, left, right } from 'src/core/logic/Either';
 
 import { InvalidNameUserError } from '../domain/entity/errors/invalid-name-user.error';
 import { InvalidUserEmailError } from '../domain/entity/errors/invalid-user-email.error';

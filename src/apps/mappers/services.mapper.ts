@@ -10,7 +10,7 @@ import {
 import { Services as ServicesEntity } from '../domain/entity/services/services';
 
 import { Name } from '../domain/entity/services/name';
-import { Status } from '../domain/entity/services/Status';
+import { Status } from '../domain/entity/services/status';
 import { Ambient } from '../domain/entity/services/ambient';
 import { PathUrl } from '../domain/entity/services/path-url';
 import { ServiceType } from '../domain/entity/services/service-type';

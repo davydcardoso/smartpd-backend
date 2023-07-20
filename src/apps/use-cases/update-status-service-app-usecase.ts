@@ -1,7 +1,7 @@
 import { UseCase } from 'src/core/domain/use-case';
 import { Either, left, right } from 'src/core/logic/Either';
 
-import { Status } from '../domain/entity/services/Status';
+import { Status } from '../domain/entity/services/status';
 import { Services } from '../domain/entity/services/services';
 
 import { UserRepository } from 'src/users/infra/repositories/user.repository';

@@ -5,7 +5,7 @@ import { Name } from './name';
 import { PathUrl } from './path-url';
 import { Description } from './description';
 import { Ambient } from './ambient';
-import { Status } from './Status';
+import { Status } from './status';
 import { ServiceType } from './service-type';
 
 type ServicesProps = {
